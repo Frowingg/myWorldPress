@@ -24,6 +24,8 @@ Route::middleware('auth')
 
     // specifico il path della home che usa index() per gli admin
     Route::get('/', 'HomeController@index')->name('home');
+    // specifico il path del Controller dai cui la CRUD deve prendere le info
+    Route::resource('products', 'ProductController');
 });
 
 // specifico che per ogni path scritto male o se un utento non admin cerca 
