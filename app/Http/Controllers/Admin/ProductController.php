@@ -13,10 +13,12 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         // prendo tutti i Prodotti dal db
         $products = Product::All();
+
+        $request_info = $request->all();
 
         // li metto in $data
         $data = [
@@ -56,7 +58,14 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        // prendo il post specifico dall'id
+        $product = Product::findOrFail($id);
+
+        $data = [
+            'product' => $product
+        ];
+
+        return view('admin.products.show', $data);
     }
 
     /**

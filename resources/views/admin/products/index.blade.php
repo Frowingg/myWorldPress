@@ -10,8 +10,8 @@
                     {{-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
                     <div class="card-body">
                         <h5 class="card-title">{{ $product->title }}</h5>
-                        {{-- <p class="card-text">{{ $product->content }}</p> --}}
-                        {{-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                        {{-- gli indico la rotta per lo show e gli passo l'id --}}
+                        <a href="{{ route('admin.products.show', ['product' => $product->id]) }}" class="btn btn-primary">See product.</a>
                     </div>
                 </div>
             </div>
