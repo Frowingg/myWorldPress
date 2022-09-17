@@ -61,7 +61,7 @@ class ProductController extends Controller
 
         $new_product->save();
 
-        //scrivo che l'admin dopo aver salvato il post venga rimandato alla show del nuovo post
+        //dopo aver salvato il product mando l'admin alla show del nuovo post
         return redirect()->route('admin.products.show', ['product' => $new_product->id]);
 
     }
@@ -92,7 +92,13 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::findOrfail($id);
+
+        $data = [
+            'product' => $product
+        ];
+
+        return view('admin.products.edit', $data);
     }
 
     /**
@@ -104,7 +110,20 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // controllo che i dati passati siano validi con una funzione che mi scrivo sotto
+        $request->validate($this->getValidationRules());
+
+        // richiedo le nuove info per il nuovo post
+        $form_data = $request->all();
+
+        // metto in una variabile il product da aggiornare
+        $product_to_update = Product::findOrFail($id);
+
+        // faccio l'update al product da aggiornare
+        $product_to_update->update($form_data);
+
+        //dopo aver salvato le modifiche del product mando l'admin alla show del nuovo post
+        return redirect()->route('admin.products.show', ['product' => $product_to_update->id]);
     }
 
     /**

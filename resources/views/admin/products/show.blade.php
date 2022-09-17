@@ -7,4 +7,6 @@
     <p>{{ $product->content }}</p>
     <div>{{ $product->created_at }}</div>
 
+    <a class="btn btn-warning" href="{{ route('admin.products.edit', ['product' => $product->id]) }}">Modify product</a>
+
 @endsection
