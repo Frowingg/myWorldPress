@@ -13,18 +13,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('home');
-// });
-
 Auth::routes();
 
-// Route::get('/home', 'HomeController@index')->name('home');
+// routes per gli admin 
+Route::middleware('auth')
+->namespace('Admin')
+->name('admin.')
+->prefix('admin')
+->group(function() {
 
-// Route::middleware('auth')
-// ->namespace('Admin')
-// ->name('admin.')
-// ->prefix('admin')
-// ->group(function() {
-//     Route::get('/', 'HomeController@index')->name('home');
-// });
+    // specifico il path della home che usa index() per gli admin
+    Route::get('/', 'HomeController@index')->name('home');
+});
+
+// specifico che per ogni path scritto male o se un utento non admin cerca 
+// di accedere ai path degli admin viene rimandato alla home del guest
+Route::get('{any?}', function () {
+    return view('guest.home');
+})->where('any', '.*');
