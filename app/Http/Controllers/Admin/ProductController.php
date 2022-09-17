@@ -13,12 +13,13 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    // public function index(Request $request)
+    public function index()
     {
         // prendo tutti i Prodotti dal db
         $products = Product::All();
 
-        $request_info = $request->all();
+        // $request_info = $request->all();
 
         // li metto in $data
         $data = [
@@ -36,7 +37,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.products.create');
     }
 
     /**
@@ -47,7 +48,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // controllo che i dati passati siano validi con una funzione che mi scrivo sotto
+        $request->validate($this->getValidationRules());
+
+        // richiedo le nuove info per il nuovo post
+        $form_data = $request->all();
+
+        //attraverso il fill aggiungo al db il nuovo product
+        $new_product = new Product();
+
+        $new_product->fill($form_data);
+
+        $new_product->save();
+
+        //scrivo che l'admin dopo aver salvato il post venga rimandato alla show del nuovo post
+        return redirect()->route('admin.products.show', ['product' => $new_product->id]);
+
     }
 
     /**
@@ -100,5 +116,13 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    protected function getValidationRules() {
+        return [
+            'title' => 'required|max:255',
+            'content' => 'required|max:60000'
+        ];
     }
 }
