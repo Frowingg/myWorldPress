@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Product;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -63,6 +64,9 @@ class ProductController extends Controller
         $new_product = new Product();
 
         $new_product->fill($form_data);
+
+        // creo il nuovo slu partendo dal titolo chiamandomi la funzione sotto
+        $new_product->slug = $this->getSlugFromTitle($new_product->title);
 
         $new_product->save();
 
@@ -124,6 +128,14 @@ class ProductController extends Controller
         // metto in una variabile il product da aggiornare
         $product_to_update = Product::findOrFail($id);
 
+        // se il nuovo titolo è diverso dal precedente mi ricavo il nuovo slug
+        if($form_data['title'] !== $product_to_update->title) {
+            $form_data['slug'] = $this->getSlugFromTitle($form_data['title']);
+        // altrimenti dico a laravel che lo slug è lo stesso di prima
+        } else {
+            $form_data['slug'] = $product_to_update->slug;
+        }
+
         // faccio l'update al product da aggiornare
         $product_to_update->update($form_data);
 
@@ -151,5 +163,36 @@ class ProductController extends Controller
             'title' => 'required|max:255',
             'content' => 'required|max:60000'
         ];
+    }
+
+    protected function getSlugFromTitle($title) {
+
+        // creo lo slug da salvare aggiungendo tra le parole del titolo "-"
+        $slug_to_save = Str::slug($title, '-');
+
+        // salvo lo slug da salvare in una variabile
+        $slug_base = $slug_to_save;  
+        
+        // controllo che lo slug da salvare non esiste gia negli altri product
+        $existing_slug_product = Product::where('slug', '=', $slug_to_save)->first();
+
+        // creo un counter per
+        $counter = 1;
+
+        // finche esiste nel db uno slug uguale a quello da salvare
+        while($existing_slug_product) {
+
+            // aggiungo allo slug da salvare '-' alla fine e il numero del counter
+            $slug_to_save = $slug_base . '-' . $counter;
+
+            // controllo che lo slug da salvare non esiste gia negli altri product
+            $existing_slug_product = Product::where('slug', '=', $slug_to_save)->first();
+
+            // aumento di uno il counter
+            $counter++;
+        }
+
+        // quando non ci sono più slug come il mio, me lo torno
+        return $slug_to_save;
     }
 }

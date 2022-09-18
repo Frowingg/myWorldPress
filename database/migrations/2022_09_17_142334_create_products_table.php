@@ -17,6 +17,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('title', 255);
             $table->text('content');
+            $table->string('slug', 255)->unique();
             $table->timestamps();
         });
     }
