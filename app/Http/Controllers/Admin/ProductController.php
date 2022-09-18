@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Product;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class ProductController extends Controller
 {
@@ -86,8 +87,15 @@ class ProductController extends Controller
         // prendo il post specifico dall'id
         $product = Product::findOrFail($id);
 
+        // prendo data e orario attuale con carbon
+        $now = Carbon::now();
+
+        // calcolo quanti giorni fa è stato creato il product utilizzando il metodo diffInDays della classe carbon
+        $created_days_ago = $product->created_at->diffInDays($now);
+
         $data = [
-            'product' => $product
+            'product' => $product,
+            'created_days_ago' => $created_days_ago
         ];
 
         return view('admin.products.show', $data);
