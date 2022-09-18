@@ -3,6 +3,12 @@
 @section('content')
     <h1>Index</h1>
 
+    @if($deleted == 'yes')
+        <div class="alert alert-success" role="alert">
+            Post deleted correctly.
+        </div>
+    @endif
+
     <div class="row row-cols-3">
         @foreach($products as $product) 
             <div class="col mt-3">

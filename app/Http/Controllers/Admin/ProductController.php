@@ -13,17 +13,22 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // public function index(Request $request)
-    public function index()
+    // request per richiedo le info dal delete per la conferma
+    public function index(Request $request)
     {
         // prendo tutti i Prodotti dal db
         $products = Product::All();
 
-        // $request_info = $request->all();
+        // prendo tutte le info passate a index
+        $request_info = $request->all();
+
+        // se tra le info prese deleted è confermato mando la conferma per l'alert
+        $deleted = isset($request_info['deleted']) ? $request_info['deleted'] : null;
 
         // li metto in $data
         $data = [
             'products' => $products,
+            'deleted' => $deleted
         ];
 
         // gli passo i $data e gli indico dove mostrarli
@@ -134,7 +139,10 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post_to_delete = Product::findOrFail($id);
+        $post_to_delete->delete();
+
+        return redirect()->route('admin.products.index', ['deleted'=>'yes']);
     }
 
 
