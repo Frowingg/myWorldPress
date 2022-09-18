@@ -9,6 +9,12 @@ class Product extends Model
     protected $fillable = [
         'title',
         'content',
-        'slug'
+        'slug',
+        'category_id'
     ];
+
+    // collego la tab products
+    public function category() {
+        return $this->belongsTo('App\Category');
+    }
 }

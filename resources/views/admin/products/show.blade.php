@@ -8,6 +8,8 @@
     <p>{{ $product->content }}</p>
     {{-- slug --}}
     <div><strong>Slug:</strong> {{ $product->slug }}</div>
+    {{-- category --}}
+    <div><strong>Category:</strong> {{ $product->category ? $product->category->name : 'none' }}</div>
     {{-- created --}}
     @if($created_days_ago > 0)
         <div> <strong> Created </strong> {{$created_days_ago}} day{{$created_days_ago > 1 ? '' : 's'}} ago. - {{ $product->created_at->format('l, j F Y') }}</div>

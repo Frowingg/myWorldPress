@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Product;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Category;
 
 class ProductController extends Controller
 {
@@ -44,7 +45,13 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create');
+        $categories = Category::all();
+
+        $data = [
+            'categories' => $categories
+        ];
+
+        return view('admin.products.create', $data);
     }
 
     /**
@@ -110,9 +117,11 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrfail($id);
+        $categories = Category::all();
 
         $data = [
-            'product' => $product
+            'product' => $product,
+            'categories' => $categories
         ];
 
         return view('admin.products.edit', $data);
@@ -169,7 +178,8 @@ class ProductController extends Controller
     protected function getValidationRules() {
         return [
             'title' => 'required|max:255',
-            'content' => 'required|max:60000'
+            'content' => 'required|max:60000',
+            'category' => 'nullable|exist:category,id'
         ];
     }
 
