@@ -21,7 +21,8 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         // prendo tutti i Prodotti dal db
-        $products = Product::All();
+        // $products = Product::All();
+        $products = Product::paginate(6);
 
         // prendo tutte le info passate a index
         $request_info = $request->all();
