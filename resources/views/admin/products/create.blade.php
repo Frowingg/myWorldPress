@@ -37,6 +37,29 @@
             </select>
         </div>
 
+        {{-- <div class="mt-3">
+            Tags:
+            @foreach($tags as $tag)
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" value="{{$tag->id}}" id="tag-{{$tag->id}}" name="tag[]"
+                    {{in_array($tag->id, old('tags', [])) ? 'checked' : ''}}>
+                    <label for="tag-{{$tag->id}}" class="form-check-label">{{$tag->name}}</label>
+                </div>
+            @endforeach
+        </div> --}}
+        <div class="mb-3">
+            Tags:
+            @foreach($tags as $tag)
+                <div class="form-check">            
+                    <input class="form-check-input" type="checkbox" value="{{ $tag->id }}" id="tag-{{ $tag->id }}" name="tags[]" 
+                    {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="tag-{{ $tag->id }}">
+                        {{ $tag->name }}
+                    </label>           
+                </div>
+            @endforeach
+        </div>
+
         <button type="submit" class="btn btn-primary">Save product</button>
       </form>
 

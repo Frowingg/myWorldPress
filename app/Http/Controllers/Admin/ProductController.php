@@ -8,6 +8,7 @@ use App\Product;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Category;
+use App\Tag;
 
 class ProductController extends Controller
 {
@@ -46,9 +47,11 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
         $data = [
-            'categories' => $categories
+            'categories' => $categories,
+            'tags' => $tags     
         ];
 
         return view('admin.products.create', $data);
@@ -77,6 +80,10 @@ class ProductController extends Controller
         $new_product->slug = $this->getSlugFromTitle($new_product->title);
 
         $new_product->save();
+
+        if(isset($form_data['tags'])) {
+            $new_product->tags()->sync($form_data['tags']);
+        }
 
         //dopo aver salvato il product mando l'admin alla show del nuovo post
         return redirect()->route('admin.products.show', ['product' => $new_product->id]);
@@ -118,10 +125,12 @@ class ProductController extends Controller
     {
         $product = Product::findOrfail($id);
         $categories = Category::all();
+        $tags = Tag::all();
 
         $data = [
             'product' => $product,
-            'categories' => $categories
+            'categories' => $categories,
+            'tags' => $tags
         ];
 
         return view('admin.products.edit', $data);
@@ -155,6 +164,12 @@ class ProductController extends Controller
 
         // faccio l'update al product da aggiornare
         $product_to_update->update($form_data);
+
+        if(isset($form_data['tags'])) {
+            $product_to_update->tags()->sync($form_data['tags']);
+        } else {
+            $product_to_update->tags()->sync([]);
+        }
 
         //dopo aver salvato le modifiche del product mando l'admin alla show del nuovo post
         return redirect()->route('admin.products.show', ['product' => $product_to_update->id]);

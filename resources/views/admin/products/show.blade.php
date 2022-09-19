@@ -16,12 +16,19 @@
     @else 
         <div> <strong> Created </strong> today - {{ $product->created_at->format('l, j F Y') }}</div>
     @endif
-
+    {{-- tags --}}
+    <strong> Tags: </strong>
+    @if(!$product->tags->isEmpty())
+        @foreach($product->tags as $tag)
+            {{ $tag->name }}{{ !$loop->last ? ',' : '' }}
+        @endforeach
+    @else  
+        none
+    @endif     
     {{-- edit button --}}
     <div class="mt-3">
     <a class="btn btn-warning" href="{{ route('admin.products.edit', ['product' => $product->id]) }}">Modify product</a>
     </div>
-
     <br>
     {{-- delete button --}}
     <div>
