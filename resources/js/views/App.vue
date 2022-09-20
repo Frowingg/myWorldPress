@@ -1,16 +1,24 @@
 <template>
-    <main>
-        <Products /> 
-    </main>
+    <div>
+        <header>
+            <MainHeader />
+        </header>
+
+        <main>
+            <router-view></router-view>
+        </main>
+    </div>
+
+
 </template>
 
 <script>
-import Products from '../components/Products.vue';
+import MainHeader from '../components/MainHeader.vue';
 
 export default {
     name: 'App',
     components: {
-        Products
+        MainHeader
     }
 }
 </script>
