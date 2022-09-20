@@ -1,3 +1,16 @@
 <template>
-    <h1>Stampato con Vuejs</h1>
+    <main>
+        <Products /> 
+    </main>
 </template>
+
+<script>
+import Products from '../components/Products.vue';
+
+export default {
+    name: 'App',
+    components: {
+        Products
+    }
+}
+</script>
