@@ -25,7 +25,13 @@ export default {
     mounted() {
         axios.get('/api/products/' + this.$route.params.slug)
         .then((response) => {
-            this.product = response.data.results;
+            // Se abbiamo trovato un post ok popoliamo this.post e lo stampiamo
+            if(response.data.success) {
+                this.product = response.data.results;
+            // Altrimeneti se il post non è stato trovato reindirizziamo l'utente a 404
+            } else {
+                this.$router.push({name: 'not-found'});
+            }
         });
     }
 }

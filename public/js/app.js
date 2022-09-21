@@ -2057,7 +2057,14 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get('/api/products/' + this.$route.params.slug).then(function (response) {
-      _this.product = response.data.results;
+      // Se abbiamo trovato un post ok popoliamo this.post e lo stampiamo
+      if (response.data.success) {
+        _this.product = response.data.results; // Altrimeneti se il post non è stato trovato reindirizziamo l'utente a 404
+      } else {
+        _this.$router.push({
+          name: 'not-found'
+        });
+      }
     });
   }
 });
