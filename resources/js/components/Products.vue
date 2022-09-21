@@ -10,6 +10,15 @@
                         <div class="card-body">
                             <div class="card-title">{{ product.title }}</div>
                             <p class="card-text">{{ truncateText(product.content) }}</p>
+                            <router-link 
+                                class="btn btn-primary" 
+                                :to="{
+                                    name: 'single-product', 
+                                    params: { slug: product.slug }
+                                }"
+                            >
+                            Leggi
+                            </router-link>
                         </div>
                     </div>
                 </div>

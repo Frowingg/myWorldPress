@@ -18,4 +18,21 @@ class ProductController extends Controller
 
         return response()->json($data);
     }
+
+    public function show($slug) {
+        $product = Product::where('slug', '=', $slug)->with(['tags', 'category'])->first();
+
+        if($product) {
+            $data =  [
+                'success' => true,
+                'results' => $product
+            ];
+        } else {
+            $data = [
+                'success' => false
+            ];
+        }
+
+        return response()->json($data);
+    }
 }
