@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use App\Category;
 use App\Tag;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewProductAdminEmail;
 
 class ProductController extends Controller
 {
@@ -93,6 +95,9 @@ class ProductController extends Controller
         if(isset($form_data['tags'])) {
             $new_product->tags()->sync($form_data['tags']);
         }
+
+        // invio l'email all'admin per avvertirlo del nuovo prodotto inserito nel db
+        Mail::to('admin@boolpress.it')->send(new NewProductAdminEmail($new_product));
 
         //dopo aver salvato il product mando l'admin alla show del nuovo post
         return redirect()->route('admin.products.show', ['product' => $new_product->id]);
