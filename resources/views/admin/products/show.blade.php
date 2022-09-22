@@ -4,6 +4,10 @@
     <h1>Show</h1>
     {{-- title --}}
     <h2>{{ $product->title }}</h2>
+    {{-- image --}}
+    @if ($product->cover)
+        <img class="w-50" src="{{ asset('storage/' . $product->cover) }}" alt="img-not-found">
+    @endif
     {{-- content --}}
     <p>{{ $product->content }}</p>
     {{-- slug --}}

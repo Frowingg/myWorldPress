@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.products.update', ['product' => $product->id]) }}" method="post">
+    <form action="{{ route('admin.products.update', ['product' => $product->id]) }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -22,11 +22,20 @@
           <label class="form-label" for="title">Title</label>
           <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" value="{{ old('title') ? old('title') : $product->title }}">
         </div>
+        <div class="mt-3">
+            <label class="form-label" for="image">Image</label>
+            <input type="file" class="form-controll" id="image" name="image">
+
+            @if($product->cover)
+                <div>Loaded image:</div>
+                <img class="w-50" src="{{ asset('storage/' . $product->cover) }}" alt="img-not-found">
+            @endif
+            
+        </div>
         <div class="mb-3">
           <label class="form-label" for="content">Content</label>
           <input type="text" class="form-control" id="content" name="content" placeholder="Enter content" value="{{ old('content') ? old('content') : $product->content }}">
         </div>
-
         <div class="mb-3">
           <label for="category_id">Category</label>
           <select name="category_id" id="category_id" class="form-select">

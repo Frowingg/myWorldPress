@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Category;
 use App\Tag;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -72,6 +73,13 @@ class ProductController extends Controller
         // richiedo le nuove info per il nuovo post
         $form_data = $request->all();
 
+        // se è passata un file immagine
+        if(isset($form_data['image'])) {
+            // carico il file nella cartella products-cover e torno il path della img caricata
+            $img_path = Storage::put('products-covers', $form_data['image']);
+            // popolo il form_data con il path dell'img
+            $form_data['cover'] = $img_path;
+        }
         //attraverso il fill aggiungo al db il nuovo product
         $new_product = new Product();
 
@@ -155,6 +163,21 @@ class ProductController extends Controller
         // metto in una variabile il product da aggiornare
         $product_to_update = Product::findOrFail($id);
 
+        // se mi viene passata un img
+        if(isset($form_data['image'])) {
+            // se è gia presente una img
+            if($product_to_update->cover) {
+                // la cancello
+                Storage::delete($product_to_update->cover);
+            }
+
+            // carico il file nella cartella products-cover e torno il path della img caricata
+            $img_path = Storage::put('products-covers', $form_data['image']);
+            // popolo il form_data con il path dell'img
+            $form_data['cover'] = $img_path;
+
+        }
+
         // se il nuovo titolo è diverso dal precedente mi ricavo il nuovo slug
         if($form_data['title'] !== $product_to_update->title) {
             $form_data['slug'] = $this->getSlugFromTitle($form_data['title']);
@@ -185,6 +208,15 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $post_to_delete = Product::findOrFail($id);
+
+        // se è presente l'img nel product da eliminare
+        if($product_to_delete->cover) {
+            // lo elimino
+            Storage::delete($product_to_delete->cover);
+        }
+
+        $post_to_delete->tags()->sync([]);
+
         $post_to_delete->delete();
 
         return redirect()->route('admin.products.index', ['deleted'=>'yes']);
@@ -195,7 +227,10 @@ class ProductController extends Controller
         return [
             'title' => 'required|max:255',
             'content' => 'required|max:60000',
-            'category' => 'nullable|exist:category,id'
+            'category' => 'nullable|exist:category,id',
+            'tags' => 'nullable|exists:tags,id',
+            // 'image' => 'image|max:1024|nullable'
+            'image' => 'nullable|mimes:jpeg,jpg,png|max:1024'
         ];
     }
 

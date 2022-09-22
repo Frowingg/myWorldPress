@@ -11,6 +11,12 @@ class ProductController extends Controller
     public function index() {
         $products = Product::paginate(6);
 
+        foreach($products as $product) {
+            if($product->cover) {
+                $product->cover = asset('storage/' . $product->cover);
+            }
+        }
+
         $data = [
             'success' => true,
             'results' => $products

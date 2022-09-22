@@ -3,6 +3,8 @@
         <div v-if="product">
             <h1>{{product.title}}</h1>
 
+            <img class="w-50" v-if="product.cover" :src="product.cover" :alt="product.title">
+
             <div v-if="product.tags.length > 0">
                 <span v-for="tag in product.tags" :key="tag.id" class="badge bg-info text-dark mr-1">{{tag.name}}</span>
             </div>
@@ -16,7 +18,7 @@
 
 <script>
 export default {
-    name: 'SinglePost',
+    name: 'SingleProduct',
     data() {
         return {
             product: null
@@ -25,10 +27,10 @@ export default {
     mounted() {
         axios.get('/api/products/' + this.$route.params.slug)
         .then((response) => {
-            // Se abbiamo trovato un post ok popoliamo this.post e lo stampiamo
+            // Se abbiamo trovato un product ok popoliamo this.product e lo stampiamo
             if(response.data.success) {
                 this.product = response.data.results;
-            // Altrimeneti se il post non è stato trovato reindirizziamo l'utente a 404
+            // Altrimeneti se il product non è stato trovato reindirizziamo l'utente a 404
             } else {
                 this.$router.push({name: 'not-found'});
             }

@@ -10,7 +10,8 @@ class Product extends Model
         'title',
         'content',
         'slug',
-        'category_id'
+        'category_id',
+        'cover'
     ];
 
     // collego la tab products

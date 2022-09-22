@@ -1,6 +1,7 @@
 <template>
     <div class="card mt-3">
         <div class="card-body">
+            <img class="w-100" v-if="product.cover" :src="product.cover" :alt="product.product">
             <h5 class="card-title">{{ product.title }}</h5>
             <p class="card-text">{{ truncateText(product.content) }}</p>
             <router-link 
