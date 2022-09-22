@@ -2082,9 +2082,9 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get('/api/products/' + this.$route.params.slug).then(function (response) {
-      // Se abbiamo trovato un product ok popoliamo this.product e lo stampiamo
+      // Se abbiamo trovato un post ok popoliamo this.post e lo stampiamo
       if (response.data.success) {
-        _this.product = response.data.results; // Altrimeneti se il product non è stato trovato reindirizziamo l'utente a 404
+        _this.product = response.data.results; // Altrimeneti se il post non è stato trovato reindirizziamo l'utente a 404
       } else {
         _this.$router.push({
           name: 'not-found'
@@ -2459,7 +2459,7 @@ var render = function render() {
   }, [_vm.product ? _c("div", [_c("h1", [_vm._v(_vm._s(_vm.product.title))]), _vm._v(" "), _vm.product.cover ? _c("img", {
     staticClass: "w-50",
     attrs: {
-      src: _vm.product.cover,
+      src: "http://127.0.0.1:8000/storage/" + _vm.product.cover,
       alt: _vm.product.title
     }
   }) : _vm._e(), _vm._v(" "), _vm.product.tags.length > 0 ? _c("div", _vm._l(_vm.product.tags, function (tag) {
