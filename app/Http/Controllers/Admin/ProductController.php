@@ -212,7 +212,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $post_to_delete = Product::findOrFail($id);
+        $product_to_delete = Product::findOrFail($id);
 
         // se è presente l'img nel product da eliminare
         if($product_to_delete->cover) {
@@ -220,9 +220,9 @@ class ProductController extends Controller
             Storage::delete($product_to_delete->cover);
         }
 
-        $post_to_delete->tags()->sync([]);
+        $product_to_delete->tags()->sync([]);
 
-        $post_to_delete->delete();
+        $product_to_delete->delete();
 
         return redirect()->route('admin.products.index', ['deleted'=>'yes']);
     }
